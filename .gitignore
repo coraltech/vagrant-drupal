@@ -1,3 +1,8 @@
 # Vagrant information
 .vagrant
 
+# Eclipse IDE information
+.project
+.buildpath
+.cache
+
