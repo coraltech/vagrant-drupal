@@ -33,7 +33,8 @@ Vagrant::Config.run do |config|
   # the file precise64.pp in the manifests_path directory.
   #
   config.vm.provision :puppet do |puppet|
+    puppet.module_path    = "puppet/modules"
     puppet.manifests_path = "puppet/manifests"
-    puppet.manifest_file  = "base.pp"
+    puppet.manifest_file  = "base.pp"    
   end
 end
