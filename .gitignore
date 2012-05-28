@@ -1,6 +1,9 @@
 # Vagrant information
 .vagrant
 
+# Puppet information
+params.pp
+
 # Eclipse IDE information
 .project
 .buildpath
