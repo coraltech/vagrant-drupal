@@ -11,7 +11,7 @@
 #
 # All servers in the cluster should share the same $config_path.
 #
-$config_path = Pathname.new("../config").realpath.to_s
+$config_path = Pathname.new("/var/git/config.git").realpath.to_s
 
 
 Vagrant::Config.run do |config|
