@@ -1,3 +1,6 @@
 [submodule "puppet"]
 	path = puppet
 	url = git://github.com/coraltech/puppet-panopoly-lib.git
+[submodule "config"]
+	path = config
+	url = git://github.com/coraltech/puppet-panopoly-config.git
