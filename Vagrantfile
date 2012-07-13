@@ -13,8 +13,8 @@ Vagrant::Config.run do |config|
   config.vm.define :web1 do |web1_config|  
     web1_config.vm.host_name = "vagrant-web1"
   
-    web1_config.vm.box       = "precise64"
-    web1_config.vm.box_url   = "http://files.vagrantup.com/precise64.box"
+    web1_config.vm.box       = "ctg-ubuntu-12.04-server-amd64"
+    web1_config.vm.box_url   = "https://raw.github.com/coraltech/vagrant-boxes/master/ctg-ubuntu-12.04-server-amd64.box"
 
     web1_config.vm.network :hostonly, "172.10.10.1"
     # web1_config.vm.network :bridged
@@ -32,8 +32,8 @@ Vagrant::Config.run do |config|
   config.vm.define :web2 do |web2_config|  
     web2_config.vm.host_name = "vagrant-web2"
   
-    web2_config.vm.box       = "precise64"
-    web2_config.vm.box_url   = "http://files.vagrantup.com/precise64.box"
+    web2_config.vm.box       = "ctg-ubuntu-12.04-server-amd64"
+    web2_config.vm.box_url   = "https://raw.github.com/coraltech/vagrant-boxes/master/ctg-ubuntu-12.04-server-amd64.box"
 
     web2_config.vm.network :hostonly, "172.10.10.2"
     # web2_config.vm.network :bridged
@@ -54,8 +54,8 @@ Vagrant::Config.run do |config|
   config.vm.define :db1 do |db1_config|  
     db1_config.vm.host_name = "vagrant-db1"
   
-    db1_config.vm.box       = "precise64"
-    db1_config.vm.box_url   = "http://files.vagrantup.com/precise64.box"
+    db1_config.vm.box       = "ctg-ubuntu-12.04-server-amd64"
+    db1_config.vm.box_url   = "https://raw.github.com/coraltech/vagrant-boxes/master/ctg-ubuntu-12.04-server-amd64.box"
 
     db1_config.vm.network :hostonly, "172.10.20.1"
     # db1_config.vm.network :bridged
@@ -73,8 +73,8 @@ Vagrant::Config.run do |config|
   config.vm.define :db2 do |db2_config|  
     db2_config.vm.host_name = "vagrant-db2"
   
-    db2_config.vm.box       = "precise64"
-    db2_config.vm.box_url   = "http://files.vagrantup.com/precise64.box"
+    db2_config.vm.box       = "ctg-ubuntu-12.04-server-amd64"
+    db2_config.vm.box_url   = "https://raw.github.com/coraltech/vagrant-boxes/master/ctg-ubuntu-12.04-server-amd64.box"
 
     db2_config.vm.network :hostonly, "172.10.20.2"
     # db2_config.vm.network :bridged
