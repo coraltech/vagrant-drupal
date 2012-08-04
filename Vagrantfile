@@ -16,16 +16,16 @@ Vagrant::Config.run do |config|
     web1_config.vm.box       = "precise64"
     web1_config.vm.box_url   = "http://files.vagrantup.com/precise64.box"
 
-    web1_config.vm.network :hostonly, "172.10.10.1"
+    web1_config.vm.network :hostonly, "172.10.10.10"
     # web1_config.vm.network :bridged
   
     web1_config.vm.customize ["modifyvm", :id, "--cpus", "1", "--memory", "512"]
   
     web1_config.vm.provision :puppet do |puppet|
-      puppet.module_path    = "puppet/modules"
-      puppet.manifests_path = "puppet/manifests"
+      puppet.module_path    = "puppet/core/modules"
+      puppet.manifests_path = "puppet"
       puppet.manifest_file  = "site.pp"
-      puppet.options        = "--verbose" # NOTE: The --debug and --verbose options can be life savers!   
+      puppet.options        = "--debug --verbose" # NOTE: The --debug and --verbose options can be life savers!   
     end
   end  
   
@@ -35,16 +35,16 @@ Vagrant::Config.run do |config|
     web2_config.vm.box       = "precise64"
     web2_config.vm.box_url   = "http://files.vagrantup.com/precise64.box"
 
-    web2_config.vm.network :hostonly, "172.10.10.2"
+    web2_config.vm.network :hostonly, "172.10.10.11"
     # web2_config.vm.network :bridged
   
     web2_config.vm.customize ["modifyvm", :id, "--cpus", "1", "--memory", "512"]
   
     web2_config.vm.provision :puppet do |puppet|
-      puppet.module_path    = "puppet/modules"
-      puppet.manifests_path = "puppet/manifests"
+      puppet.module_path    = "puppet/core/modules"
+      puppet.manifests_path = "puppet"
       puppet.manifest_file  = "site.pp"
-      puppet.options        = "--verbose" # NOTE: The --debug and --verbose options can be life savers!   
+      puppet.options        = "--debug --verbose" # NOTE: The --debug and --verbose options can be life savers!   
     end
   end  
 
@@ -57,16 +57,16 @@ Vagrant::Config.run do |config|
     db1_config.vm.box       = "precise64"
     db1_config.vm.box_url   = "http://files.vagrantup.com/precise64.box"
 
-    db1_config.vm.network :hostonly, "172.10.20.1"
+    db1_config.vm.network :hostonly, "172.10.20.10"
     # db1_config.vm.network :bridged
   
     db1_config.vm.customize ["modifyvm", :id, "--cpus", "1", "--memory", "512"]
   
     db1_config.vm.provision :puppet do |puppet|
-      puppet.module_path    = "puppet/modules"
-      puppet.manifests_path = "puppet/manifests"
+      puppet.module_path    = "puppet/core/modules"
+      puppet.manifests_path = "puppet"
       puppet.manifest_file  = "site.pp"
-      puppet.options        = "--verbose" # NOTE: The --debug and --verbose options can be life savers!   
+      puppet.options        = "--debug --verbose" # NOTE: The --debug and --verbose options can be life savers!   
     end
   end  
   
@@ -76,16 +76,16 @@ Vagrant::Config.run do |config|
     db2_config.vm.box       = "precise64"
     db2_config.vm.box_url   = "http://files.vagrantup.com/precise64.box"
 
-    db2_config.vm.network :hostonly, "172.10.20.2"
+    db2_config.vm.network :hostonly, "172.10.20.11"
     # db2_config.vm.network :bridged
   
     db2_config.vm.customize ["modifyvm", :id, "--cpus", "1", "--memory", "512"]
   
     db2_config.vm.provision :puppet do |puppet|
-      puppet.module_path    = "puppet/modules"
-      puppet.manifests_path = "puppet/manifests"
+      puppet.module_path    = "puppet/core/modules"
+      puppet.manifests_path = "puppet"
       puppet.manifest_file  = "site.pp"
-      puppet.options        = "--verbose" # NOTE: The --debug and --verbose options can be life savers!   
+      puppet.options        = "--debug --verbose" # NOTE: The --debug and --verbose options can be life savers!   
     end
   end  
 end
