@@ -17,7 +17,7 @@ Vagrant::Config.run do |config|
 
   puppet_manifest_file = "site.pp"
   puppet_manifest_path = "puppet"
-  puppet_module_path   = "#{puppet_manifest_path}/core/modules:#{puppet_manifest_path}/modules"
+  puppet_module_path   = [ "#{puppet_manifest_path}/core/modules", "#{puppet_manifest_path}/modules" ]
   puppet_options       = "" # NOTE: The --debug and --verbose options can be life savers!
   
   drupal_vm_cpus       = "1"
