@@ -17,7 +17,7 @@ Vagrant::Config.run do |config|
 
   puppet_manifest_file = "site.pp"
   puppet_manifest_path = "puppet"
-  puppet_module_path   = "#{puppet_manifest_path}/core/modules"
+  puppet_module_path   = "#{puppet_manifest_path}/core/modules:#{puppet_manifest_path}/modules"
   puppet_options       = "" # NOTE: The --debug and --verbose options can be life savers!
   
   drupal_vm_cpus       = "1"
@@ -30,7 +30,7 @@ Vagrant::Config.run do |config|
   # Drupal servers
 
   config.vm.define :drupal1 do |drupal1|  
-    drupal1.vm.host_name = "vagrant-drupal1"
+    drupal1.vm.host_name = "drupal1.loc"
   
     drupal1.vm.box       = vm_box
     drupal1.vm.box_url   = vm_box_url
@@ -54,7 +54,7 @@ Vagrant::Config.run do |config|
   #---  
   
   config.vm.define :drupal2 do |drupal2|  
-    drupal2.vm.host_name = "vagrant-drupal2"
+    drupal2.vm.host_name = "drupal2.loc"
   
     drupal2.vm.box       = vm_box
     drupal2.vm.box_url   = vm_box_url
@@ -79,7 +79,7 @@ Vagrant::Config.run do |config|
   # Database servers
 
   config.vm.define :percona1 do |percona1|  
-    percona1.vm.host_name = "vagrant-percona1"
+    percona1.vm.host_name = "percona1.loc"
   
     percona1.vm.box       = vm_box
     percona1.vm.box_url   = vm_box_url
@@ -103,7 +103,7 @@ Vagrant::Config.run do |config|
   #---
   
   config.vm.define :percona2 do |percona2|  
-    percona2.vm.host_name = "vagrant-percona2"
+    percona2.vm.host_name = "percona2.loc"
   
     percona2.vm.box       = vm_box
     percona2.vm.box_url   = vm_box_url
@@ -127,7 +127,7 @@ Vagrant::Config.run do |config|
   #---
     
   config.vm.define :percona3 do |percona3|  
-    percona3.vm.host_name = "vagrant-percona3"
+    percona3.vm.host_name = "percona3.loc"
   
     percona3.vm.box       = vm_box
     percona3.vm.box_url   = vm_box_url
