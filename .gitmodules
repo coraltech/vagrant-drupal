@@ -4,3 +4,6 @@
 [submodule "config"]
 	path = config
 	url = git://github.com/coraltech/puppet-drupal-config.git
+[submodule "bash"]
+	path = bash
+	url = git://github.com/coraltech/bash-shared_lib.git
