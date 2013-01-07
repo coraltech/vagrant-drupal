@@ -7,3 +7,6 @@
 [submodule "bash"]
 	path = bash
 	url = git://github.com/coraltech/bash-shared_lib.git
+[submodule "lib/gems/git"]
+	path = lib/gems/git
+	url = git://github.com/coraltech/ruby-git.git
