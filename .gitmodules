@@ -10,3 +10,6 @@
 [submodule "lib/gems/git"]
 	path = lib/gems/git
 	url = git://github.com/coraltech/ruby-git.git
+[submodule "lib/gems/json"]
+	path = lib/gems/json
+	url = git://github.com/coraltech/ruby-json.git
