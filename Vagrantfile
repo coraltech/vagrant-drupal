@@ -1,150 +1,69 @@
 #
-# High availability Drupal distribution (test platform)
+# Configurable Vagrant server environment (development platform)
 #-------------------------------------------------------------------------------
 #
-# This Vagrantfile is designed to test server components in the enclosed manifests
-# relating to setting up a Drupal site.
+# This Vagrantfile is designed to test server components
 #
+# => "puppet" directory should be a submodule with a bootstrap capable Puppet library.
+# => "config" directory should be a submodule with a JSON configuration repository.
+#
+
+require 'coral_vagrant'
+
 Vagrant::Config.run do |config|
 
   #-----------------------------------------------------------------------------
-  # General configurations
+  # Server definitions (managed by ./config/cloud.json)
 
-  vm_network_bridged   = false
-
-  vm_box               = "precise64"
-  vm_box_url           = "http://files.vagrantup.com/precise64.box"
-
-  puppet_manifest_file = "site.pp"
-  puppet_manifest_path = "puppet"
-  puppet_module_path   = [ "#{puppet_manifest_path}/core/modules", "#{puppet_manifest_path}/modules" ]
-  puppet_options       = "" # NOTE: The --debug and --verbose options can be life savers!
+  cloud = Coral.init_vagrant(File.dirname(__FILE__))
   
-  drupal_vm_cpus       = "1"
-  drupal_vm_memory     = "512"
-  
-  percona_vm_cpus      = "1"
-  percona_vm_memory    = "512"
-
-  #-----------------------------------------------------------------------------
-  # Drupal servers
-
-  config.vm.define :drupal1 do |drupal1|  
-    drupal1.vm.host_name = "drupal1.loc"
-  
-    drupal1.vm.box       = vm_box
-    drupal1.vm.box_url   = vm_box_url
-
-    if vm_network_bridged
-      drupal1.vm.network :bridged
-    else
-      drupal1.vm.network :hostonly, "172.10.10.11"
-    end
-  
-    drupal1.vm.customize ["modifyvm", :id, "--cpus", drupal_vm_cpus, "--memory", drupal_vm_memory]
-  
-    drupal1.vm.provision :puppet do |puppet|
-      puppet.module_path    = puppet_module_path
-      puppet.manifests_path = puppet_manifest_path
-      puppet.manifest_file  = puppet_manifest_file
-      puppet.options        = puppet_options
-    end
-  end
-  
-  #---  
-  
-  config.vm.define :drupal2 do |drupal2|  
-    drupal2.vm.host_name = "drupal2.loc"
-  
-    drupal2.vm.box       = vm_box
-    drupal2.vm.box_url   = vm_box_url
-
-    if vm_network_bridged
-      drupal2.vm.network :bridged
-    else
-      drupal2.vm.network :hostonly, "172.10.10.12"
-    end
-  
-    drupal2.vm.customize ["modifyvm", :id, "--cpus", drupal_vm_cpus, "--memory", drupal_vm_memory]
-  
-    drupal2.vm.provision :puppet do |puppet|
-      puppet.module_path    = puppet_module_path
-      puppet.manifests_path = puppet_manifest_path
-      puppet.manifest_file  = puppet_manifest_file
-      puppet.options        = puppet_options   
-    end
-  end  
-
-  #-----------------------------------------------------------------------------
-  # Database servers
-
-  config.vm.define :percona1 do |percona1|  
-    percona1.vm.host_name = "percona1.loc"
-  
-    percona1.vm.box       = vm_box
-    percona1.vm.box_url   = vm_box_url
-
-    if vm_network_bridged
-      percona1.vm.network :bridged
-    else
-      percona1.vm.network :hostonly, "172.10.20.11"
-    end
-
-    percona1.vm.customize ["modifyvm", :id, "--cpus", percona_vm_cpus, "--memory", percona_vm_memory]
-  
-    percona1.vm.provision :puppet do |puppet|
-      puppet.module_path    = puppet_module_path
-      puppet.manifests_path = puppet_manifest_path
-      puppet.manifest_file  = puppet_manifest_file
-      puppet.options        = puppet_options  
+  cloud.servers.each do |server_name, server|  
+    config.vm.define server_name do |machine|    
+      # Basic server settings      
+      machine.vm.host_name = server.hostname
+            
+      machine.vm.box       = cloud.get('vm_box')
+      machine.vm.box_url   = cloud.get('vm_box_url')
+      
+      # Network interfaces      
+      if cloud.get('vm_network_bridged', false, :test)
+        machine.vm.network :bridged
+      else
+        machine.vm.network :hostonly, server.public_ip
+        
+        unless server.virtual_ip.empty?
+          machine.vm.network :hostonly, server.virtual_ip
+        end
+      end
+     
+      # Server NFS shares      
+      cloud.servers[server_name].shares.each do |name, share|
+        unless share.directory.empty? || share.remote_dir.empty?
+          machine.vm.share_folder name, share.remote_dir, share.directory, :nfs => true
+        end
+      end
+            
+      # Server settings      
+      vm_cpus   = cloud.search(server_name, 'vm_cpus', '1')
+      vm_memory = cloud.search(server_name, 'vm_memory', '512')
+      
+      machine.vm.customize [ "modifyvm", :id, "--cpus", vm_cpus, "--memory", vm_memory ]
+            
+      # Puppet configuration
+      puppet_manifest_path = cloud.get('puppet_manifest_path')
+      puppet_module_path   = [] 
+      cloud.get('puppet_module_path', [], :array).each do |module_path|
+        puppet_module_path << File.join(puppet_manifest_path, module_path)
+      end
+      
+      # Puppet provisioning      
+      machine.vm.provision :puppet do |puppet|
+        puppet.module_path    = puppet_module_path
+        puppet.manifests_path = puppet_manifest_path
+        puppet.manifest_file  = cloud.get('puppet_manifest_file')
+        puppet.options        = cloud.search(server_name, 'puppet_options')
+        puppet.facter         = cloud.search(server_name, 'facts')
+      end
     end
   end
-  
-  #---
-  
-  config.vm.define :percona2 do |percona2|  
-    percona2.vm.host_name = "percona2.loc"
-  
-    percona2.vm.box       = vm_box
-    percona2.vm.box_url   = vm_box_url
-
-    if vm_network_bridged
-      percona2.vm.network :bridged
-    else
-      percona2.vm.network :hostonly, "172.10.20.12"
-    end
- 
-    percona2.vm.customize ["modifyvm", :id, "--cpus", percona_vm_cpus, "--memory", percona_vm_memory]
-  
-    percona2.vm.provision :puppet do |puppet|
-      puppet.module_path    = puppet_module_path
-      puppet.manifests_path = puppet_manifest_path
-      puppet.manifest_file  = puppet_manifest_file
-      puppet.options        = puppet_options  
-    end
-  end
-  
-  #---
-    
-  config.vm.define :percona3 do |percona3|  
-    percona3.vm.host_name = "percona3.loc"
-  
-    percona3.vm.box       = vm_box
-    percona3.vm.box_url   = vm_box_url
-
-    if vm_network_bridged
-      percona3.vm.network :bridged
-    else
-      percona3.vm.network :hostonly, "172.10.20.13"
-    end
- 
-    percona3.vm.customize ["modifyvm", :id, "--cpus", percona_vm_cpus, "--memory", percona_vm_memory]
-  
-    percona3.vm.provision :puppet do |puppet|
-      puppet.module_path    = puppet_module_path
-      puppet.manifests_path = puppet_manifest_path
-      puppet.manifest_file  = puppet_manifest_file
-      puppet.options        = puppet_options  
-    end
-  end  
 end
